@@ -1,0 +1,51 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:   # permette di avviare manualmente dal sito GitHub
+
+jobs:
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-latest   # Mac gratuito offerto da GitHub
+
+    steps:
+      # 1. Scarica il codice
+      - name: Checkout codice
+        uses: actions/checkout@v4
+
+      # 2. Installa Flutter
+      - name: Installa Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1'
+          channel: 'stable'
+          cache: true
+
+      # 3. Verifica installazione
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      # 4. Scarica dipendenze Dart/Flutter
+      - name: flutter pub get
+        run: flutter pub get
+
+      # 5. Installa dipendenze CocoaPods iOS
+      - name: Pod install
+        run: |
+          cd ios
+          pod install --repo-update
+          cd ..
+
+      # 6. Build IPA senza firma (Sideloadly firma al momento dell'installazione)
+      - name: Build IPA (no-codesign)
+        run: flutter build ipa --no-codesign --release
+
+      # 7. Carica l'IPA come artefatto scaricabile
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: teams-app-ios
+          path: build/ios/ipa/teams_app.ipa
+          retention-days: 30   # disponibile per 30 giorni
