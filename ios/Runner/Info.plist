@@ -57,21 +57,11 @@
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
 
-    <!-- Permetti contenuto HTTP (non necessario ma per compatibilità) -->
+    <!-- Permetti tutti i domini HTTPS (Teams usa molti domini Microsoft) -->
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsArbitraryLoads</key>
-        <false/>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>teams.microsoft.com</key>
-            <dict>
-                <key>NSExceptionAllowsInsecureHTTPLoads</key>
-                <false/>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-            </dict>
-        </dict>
+        <true/>
     </dict>
 </dict>
 </plist>
