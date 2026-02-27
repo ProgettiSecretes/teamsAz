@@ -42,10 +42,14 @@ jobs:
       - name: Build IPA (no-codesign)
         run: flutter build ipa --no-codesign --release
 
+      # 6b. Debug: mostra cosa ha generato Flutter
+      - name: Lista file build/ios
+        run: find build/ios -name "*.ipa" -o -name "*.xcarchive" 2>/dev/null || echo "Nessun file trovato"
+
       # 7. Carica l'IPA come artefatto scaricabile
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: teams-app-ios
-          path: build/ios/ipa/teams_app.ipa
+          path: build/ios/ipa/*.ipa
           retention-days: 30   # disponibile per 30 giorni
