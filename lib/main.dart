@@ -62,8 +62,8 @@ class _TeamsWebViewState extends State<TeamsWebView> {
   void initState() {
     super.initState();
     _checkConnectivity();
-    Connectivity().onConnectivityChanged.listen((results) {
-      final connected = results.any((r) => r != ConnectivityResult.none);
+    Connectivity().onConnectivityChanged.listen((result) {
+      final connected = result != ConnectivityResult.none;
       if (mounted) {
         setState(() => _isConnected = connected);
         if (connected && _hasError) {
@@ -76,7 +76,7 @@ class _TeamsWebViewState extends State<TeamsWebView> {
   Future<void> _checkConnectivity() async {
     final result = await Connectivity().checkConnectivity();
     setState(() {
-      _isConnected = result.any((r) => r != ConnectivityResult.none);
+      _isConnected = result != ConnectivityResult.none;
     });
   }
 
